@@ -1,7 +1,6 @@
 package GroupSize.src;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /*
@@ -23,27 +22,56 @@ import java.util.List;
 public class GroupSize {
     public static void main(String[] args)
     {
-
+        int[] testInput = {3,3,3,3,3,1,3};
+        System.out.println(groupThePeople(testInput));
     }
 
-    public List<List<Integer>> groupThePeople(int[] groupSizes) 
+    public static List<List<Integer>> groupThePeople(int[] groupSizes) 
     {
-        List<List<Integer>> accumulatingLists = new ArrayList<List<Integer>>();
-        for (int i = 0; i < groupSizes.length; i++)
+        List<List<Integer>> finalGroups = new ArrayList<List<Integer>>();
+
+        //Convert Array to ArrayList for easy manipulation of elements
+        //Arrays are difficult to resize
+        List<Integer> list_groupSizes= new ArrayList<Integer>();
+        List<Integer> list_uniqueID = new ArrayList<Integer>();
+        for(int i = 0; i < groupSizes.length; i++)
         {
-            List<Integer> toAdd = new ArrayList<Integer>();
-            toAdd.add(groupSizes[i]);
-            int count = 0;
-            for (int j = i+1; j < groupSizes.length || groupSizes[i] > count; j++)
-            {
-                count++;
-                if (groupSizes[i] == groupSizes[j])
-                {
-                    toAdd.add(groupSizes[j]);
-                }
-            }
-            accumulatingLists.add(toAdd);
+            list_groupSizes.add(groupSizes[i]);
+            list_uniqueID.add(i);
         }
-        return accumulatingLists;
+
+        
+        while (list_groupSizes.size() != 0)
+        {   
+            //Create the first group and place one element inside (in this case we use the first element)
+            List<Integer> group = new ArrayList<Integer>();
+            int currGroupSize = list_groupSizes.get(0);
+            group.add(list_uniqueID.get(0));
+            list_groupSizes.remove(0);
+            list_uniqueID.remove(0);
+
+            
+            int counter = 0;
+            /*
+             * NOTE: This while loop does not need to check if there any "remainder" individuals who cant fulfill their group size due to lack of individuals
+             * because the prompt states "It is guaranteed that there will be at least one valid solution for the given input."
+            */
+            while (group.size() != currGroupSize)
+            {
+                if (list_groupSizes.get(counter) == currGroupSize)
+                {
+                    group.add(list_uniqueID.get(counter));
+                    list_groupSizes.remove(counter);
+                    list_uniqueID.remove(counter);
+                    //Do not want to change the counter if we removed an element from the list because the indicies in the list has been shifted down
+                    counter--;
+                }
+                counter++;
+            }
+            finalGroups.add(group);
+        }
+        
+        return finalGroups;
+
     }
 }
