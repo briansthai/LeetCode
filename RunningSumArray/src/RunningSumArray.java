@@ -25,15 +25,12 @@ public class RunningSumArray {
     public static int[] runningSum(int[] nums)
     {
         int[] sumArray = new int[nums.length];
+        sumArray[0] = nums[0];
 
-        //The outer for loop will control current position in the array
-        //while the inner for loops adds the values coming up to the current position 
-        for (int i = 0; i < nums.length; i++)
+        //Add the running sum (which is being tracked by sumArray) with the current nums value
+        for (int i = 1; i < nums.length; i++)
         {
-            for (int j = i; j >= 0; j--)
-            {
-                sumArray[i] += nums[j];
-            }
+            sumArray[i] = nums[i] + sumArray[i-1];
         }
 
         return sumArray;
