@@ -29,49 +29,35 @@ public class GroupSize {
     public static List<List<Integer>> groupThePeople(int[] groupSizes) 
     {
         List<List<Integer>> finalGroups = new ArrayList<List<Integer>>();
+        List<Integer> singleGroup = new ArrayList<Integer>();
 
-        //Convert Array to ArrayList for easy manipulation of elements
-        //Arrays are difficult to resize
-        List<Integer> list_groupSizes= new ArrayList<Integer>();
-        List<Integer> list_uniqueID = new ArrayList<Integer>();
-        for(int i = 0; i < groupSizes.length; i++)
+        for (int i = 0; i < groupSizes.length; i++)
         {
-            list_groupSizes.add(groupSizes[i]);
-            list_uniqueID.add(i);
-        }
-
-        
-        while (list_groupSizes.size() != 0)
-        {   
-            //Create the first group and place one element inside (in this case we use the first element)
-            List<Integer> group = new ArrayList<Integer>();
-            int currGroupSize = list_groupSizes.get(0);
-            group.add(list_uniqueID.get(0));
-            list_groupSizes.remove(0);
-            list_uniqueID.remove(0);
-
-            
-            int counter = 0;
-            /*
-             * NOTE: This while loop does not need to check if there any "remainder" individuals who cant fulfill their group size due to lack of individuals
-             * because the prompt states "It is guaranteed that there will be at least one valid solution for the given input."
-            */
-            while (group.size() != currGroupSize)
+            //Use the groupSizes array because it tracks the uniqueID (index) and the group size
+            //When the uniqueID has been assigned we set the group size to 0 to indicate that the individual has found a group
+            if (groupSizes[i] != 0)
             {
-                if (list_groupSizes.get(counter) == currGroupSize)
+                singleGroup = new ArrayList<Integer>();
+                singleGroup.add(i);
+
+                for (int j = i+1; j < groupSizes.length; j++)
                 {
-                    group.add(list_uniqueID.get(counter));
-                    list_groupSizes.remove(counter);
-                    list_uniqueID.remove(counter);
-                    //Do not want to change the counter if we removed an element from the list because the indicies in the list has been shifted down
-                    counter--;
+                    if (groupSizes[i] == groupSizes[j] && singleGroup.size() != groupSizes[i])
+                    {
+                        singleGroup.add(j);
+                        groupSizes[j] = 0;
+                    }
+                    //Exit the for loop if the singleGroup is full because we no longer can add any more uniqueIDs
+                    if (singleGroup.size() == groupSizes[i])
+                    {
+                        break;
+                    }
+                    
                 }
-                counter++;
+                finalGroups.add(singleGroup);
             }
-            finalGroups.add(group);
         }
         
         return finalGroups;
-
     }
 }
