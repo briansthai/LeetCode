@@ -35,8 +35,20 @@ public class CountingBits {
         //13 -> 1101 -> 3
         //14 -> 1110 -> 3
         //15 -> 1111 -> 4
+        
+        ans[0] = 0;
+        for (int i = 1; i<=n; i++)
+        {
+            if (i%2 == 0)
+            {
+                ans[i] = ans[i/2];
+            }
+            else
+            {
+                ans[i] = ans[i-1]+1;
+            }
+        }
 
-        //brute force: convert numbers to binary representation and count 1's
-        //if we can find out how many number of total bits, we will know the max number and follow a better pattern
+        return ans;
     }
 }
